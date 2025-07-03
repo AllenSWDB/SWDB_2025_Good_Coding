@@ -1,3 +1,3 @@
-# aind-capsule-template
+# SWDB Day 5: Good research coding
 
-Basic structure of a capsule to be customized as needed.
+[todo]
