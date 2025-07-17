@@ -4,5 +4,15 @@
 	"options": {
 		"registry_host_arg": true,
 		"git_ask_pass": true
+	},
+	"installers": {
+		"conda": {
+			"packages": [
+				{
+					"name": "jupyterlab",
+					"version": "4.4.4"
+				}
+			]
+		}
 	}
 }
