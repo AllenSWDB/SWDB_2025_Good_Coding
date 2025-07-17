@@ -1,6 +1,6 @@
-# hash:sha256:6ceefde681fb5ad2ca41bca5b1ebdfc35ce9ce0f7acc50dc183706cc463f5d61
+# hash:sha256:9626e601343df43ea41f25636fa1d87e19c28d2c4c59222764943a8145c2ca6b
 ARG REGISTRY_HOST
-FROM $REGISTRY_HOST/codeocean/jupyterlab:3.6.1-miniconda4.12.0-python3.9-ubuntu20.04
+FROM $REGISTRY_HOST/codeocean/code-server-python-extensions-pack:4.101.2python3.12.4
 
 ARG DEBIAN_FRONTEND=noninteractive
 
