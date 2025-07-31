@@ -6,21 +6,7 @@ import pynwb
 # Set the data root according to OS
 import platform
 from pathlib import Path
-platstring = platform.platform()
 
-if 'Darwin' in platstring:
-    # macOS 
-    data_root = Path("/Volumes/Brain2023/")
-elif 'Windows'  in platstring:
-    # Windows (replace with the drive letter of USB drive)
-    data_root = Path("E:/")
-elif ('amzn' in platstring):
-    # then on CodeOcean
-    data_root = Path("/data/")
-else:
-    # then your own linux platform
-    # EDIT location where you mounted hard drive
-    data_root = Path("/media/$USERNAME/Brain2023/")
 
 # Load in a session from a NWB file
 def load_nwb(
@@ -29,11 +15,41 @@ def load_nwb(
     max_amplitude_cutoff=0.1, 
     min_presence_ratio=0.95
 ):
+    """
+    Load a NWB file and return the session, units table, and stimuli information.
+    Args:
+        path (str): Path to the NWB file (excludes the data root).
+        max_isi_violations (float): Maximum allowed ISI violations for units.
+        max_amplitude_cutoff (float): Maximum allowed amplitude cutoff for units.
+        min_presence_ratio (float): Minimum presence ratio for units.
+    Returns:
+        session (pynwb.NWBFile): The loaded NWB session.
+        units_table (pd.DataFrame): DataFrame containing units information.
+        stimuli (pd.DataFrame): DataFrame containing stimuli information.
+        good_units (pd.DataFrame): DataFrame containing units that meet the QC criteria.
+    """
+
+    platstring = platform.platform()
+
+    if 'Darwin' in platstring:
+        # macOS 
+        data_root = Path("/Volumes/Brain2023/")
+    elif 'Windows'  in platstring:
+        # Windows (replace with the drive letter of USB drive)
+        data_root = Path("E:/")
+    elif ('amzn' in platstring):
+        # then on CodeOcean
+        data_root = Path("/data/")
+    else:
+        # then your own linux platform
+        # EDIT location where you mounted hard drive
+        data_root = Path("/media/$USERNAME/Brain2023/")
+
     nwb_path = data_root / path
     session = pynwb.NWBHDF5IO(nwb_path).read()
     
     # Get stimuli information
-    stimuli = session.intervals
+    stimuli = session.intervals['Natural_Images_Lum_Matched_set_ophys_H_2019_presentations'].to_dataframe()
 
     # Get units table
     units_table = session.units.to_dataframe()
@@ -48,7 +64,7 @@ def load_nwb(
     ]
     assert len(good_units) > 0, "There are 0 units that meet the specified QC criteria in this session."
 
-    return session, units_table, stimuli
+    return session, units_table, stimuli, good_units
 
 def get_stim_window(
     spike_times,
