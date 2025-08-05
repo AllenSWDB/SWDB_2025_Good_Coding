@@ -16,3 +16,4 @@ def run_classifier(svc, x, y_test=None):
         score = svc.score(x_test, y_test)
         return y_prediction, score
     return y_prediction
+
