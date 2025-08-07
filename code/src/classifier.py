@@ -5,15 +5,14 @@ from sklearn.svm import LinearSVC
 
 def fit_classifier(x, y):
     svc = LinearSVC()
-    svc.fit(x.reshape(-1, 1), y.ravel())
+    svc.fit(x, y.ravel())
     return svc
 
 def run_classifier(svc, x, y_test=None):
-    x_test = x.reshape(-1, 1)
-    y_prediction = svc.predict(x_test)
+    y_prediction = svc.predict(x)
 
     if not y_test is None:
-        score = svc.score(x_test, y_test)
+        score = svc.score(x, y_test)
         return y_prediction, score
     return y_prediction
 

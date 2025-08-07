@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import matplotlib as mpl
+from sklearn.metrics import confusion_matrix
 
 def create_raster(
     spike_times,
@@ -35,3 +36,14 @@ def create_psth(
     ax.plot(bin_centers, a, c=color, label=label)
     ax.set_xlabel('Time from stimulus (seconds)')
     ax.set_ylabel('Spike Rate (Hz)')
+
+def create_confusion_matrix(
+    ax,
+    y_pred,
+    y_test,
+):
+    im  = ax.imshow(confusion_matrix(y_true=y_test, y_pred=y_pred, normalize='pred'))
+    ax.set_xlabel('Predicted Class')
+    ax.set_ylabel('True Class')
+    cbar = plt.colorbar(im)
+    cbar.set_label('Fraction Guessed')

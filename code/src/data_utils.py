@@ -9,19 +9,19 @@ from pathlib import Path
 
 platstring = platform.platform()
 
-    if 'Darwin' in platstring:
-        # macOS 
-        data_root = Path("/Volumes/Brain2025/")
-    elif 'Windows'  in platstring:
-        # Windows (replace with the drive letter of USB drive)
-        data_root = Path("E:/")
-    elif ('amzn' in platstring):
-        # then on CodeOcean
-        data_root = Path("/data/")
-    else:
-        # then your own linux platform
-        # EDIT location where you mounted hard drive
-        data_root = Path("/media/$USERNAME/Brain2025/")
+if 'Darwin' in platstring:
+    # macOS 
+    data_root = Path("/Volumes/Brain2025/")
+elif 'Windows'  in platstring:
+    # Windows (replace with the drive letter of USB drive)
+    data_root = Path("E:/")
+elif ('amzn' in platstring):
+    # then on CodeOcean
+    data_root = Path("/data/")
+else:
+    # then your own linux platform
+    # EDIT location where you mounted hard drive
+    data_root = Path("/media/$USERNAME/Brain2025/")
 
 
 # Load in a session from a NWB file
@@ -103,7 +103,6 @@ def get_spike_counts(
     stop=0.35
 ):
     spike_count = []
-    trial_index = []
 
     for i, stim_time in enumerate(stim_times):
         # Select spikes that fall within the time window around this stimulus
@@ -114,11 +113,9 @@ def get_spike_counts(
         spike_count.append(len(spike_times[mask]))
         
     spike_count = np.array(spike_count)
-    trial_index = np.arange(len(spike_count))
-    trial_id_types, trial_id = np.unique(stimuli.image_name.values, return_inverse= True)
+    _, trial_id = np.unique(stimuli.image_name.values, return_inverse= True)
 
     return spike_count, trial_id
-
 
 # For poopulation decoding
 def get_binned_triggered_spike_counts_fast(
@@ -147,8 +144,7 @@ def get_binned_triggered_spike_counts_fast(
     stim_times = np.asarray(stim_times)
     bins = np.asarray(bins)
 
-    # If your spike_times isn't already sorted, uncomment:
-    # spike_times = np.sort(spike_times)
+    spike_times = np.sort(spike_times)
 
     n_trials = stim_times.size
     n_bins = bins.size - 1
@@ -164,3 +160,11 @@ def get_binned_triggered_spike_counts_fast(
 
     return counts
 
+def get_spike_counts_all(units_table, stim_times, bins):
+    n_neurons = len(units_table.spike_times.values)
+    spike_count = np.empty((n_neurons, len(stim_times), len(bins)-1))
+
+    for nn in range(n_neurons):
+        spike_times = units_table.spike_times.values[nn]
+        spike_count[nn,:,:] = get_binned_triggered_spike_counts_fast(spike_times, stim_times, bins)
+    return spike_count
