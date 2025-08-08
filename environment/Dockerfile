@@ -1,4 +1,4 @@
-# hash:sha256:c416c64f5ac0d54407e74d82f30365868062d140746384feb789dfc2a59b03a7
+# hash:sha256:7c889ac4a60e38c9bfc6b014198058c0c1c75fd0ef64aa9a98e62f6c9e319440
 ARG REGISTRY_HOST
 FROM $REGISTRY_HOST/codeocean/code-server-python-extensions-pack:4.101.2python3.12.4
 
@@ -13,4 +13,4 @@ RUN conda install -y \
     && conda clean -ya
 
 RUN pip install -U --no-cache-dir \
-    numpy
+    numpy==2.3.2
