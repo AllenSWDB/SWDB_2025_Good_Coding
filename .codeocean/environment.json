@@ -13,6 +13,15 @@
 					"version": "4.4.4"
 				}
 			]
+		},
+		"pip": {
+			"packages": [
+				{
+					"name": "numpy"
+				}
+			],
+			"options": {},
+			"pre_install_options": {}
 		}
 	}
 }

@@ -1,4 +1,4 @@
-# hash:sha256:c4158c671b1fbd3988d73c682bfffb55cb3034bde88bdb21998cf3b0884bfd20
+# hash:sha256:c416c64f5ac0d54407e74d82f30365868062d140746384feb789dfc2a59b03a7
 ARG REGISTRY_HOST
 FROM $REGISTRY_HOST/codeocean/code-server-python-extensions-pack:4.101.2python3.12.4
 
@@ -11,3 +11,6 @@ COPY git-askpass /
 RUN conda install -y \
         jupyterlab==4.4.4 \
     && conda clean -ya
+
+RUN pip install -U --no-cache-dir \
+    numpy
