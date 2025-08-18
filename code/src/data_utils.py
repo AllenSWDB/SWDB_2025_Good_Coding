@@ -25,7 +25,7 @@ else:
 
 
 # Load in a session from a NWB file
-def load_nwb(
+def process_nwb_metadata(
     path, 
     max_isi_violations=0.5, 
     max_amplitude_cutoff=0.1, 
@@ -69,9 +69,20 @@ def load_nwb(
 def get_stim_window(
     spike_times,
     stim_times,
-    pre_window=0.2,     # How far before the stimulus should we look?
-    post_window=0.75,   # How far after the stimulus should we look?
+    pre_window=0.2,
+    post_window=0.75,
 ):
+    """
+    Get spike counts around each stimulus.
+    Args:
+        spike_times (numpy.ndarray): Array of spike times from trial.
+        stim_times (numpy.ndarray): Array of stimulus times from trial.
+        pre_window (float): How far before the stimulus to look.
+        post_window (float): How far after the stimulus to look.
+    Returns:
+        triggered_spike_times (numpy.ndarray): Array of stimulus-triggered spike times.
+        triggered_stim_index (numpy.ndarray): Array of simului indices.
+    """
     
     # Storage for data
     triggered_spike_times = []
@@ -102,6 +113,19 @@ def get_spike_counts(
     start=0,
     stop=0.35
 ):
+    """
+    Get spike counts in a window around each stimulus.
+    Args:
+        spike_times (numpy.ndarray): Array of spike times from trial.
+        stim_times (numpy.ndarray): Array of stimulus times from trial.
+        stimuli (pd.DataFrame): DataFrame containing stimuli information.
+        start (float): How far before the stimulus to look.
+        stop (float): How far after the stimulus to look.
+    Returns:
+        spike_count (numpy.ndarray): Array of spike counts within time window
+        trial_id (numpy.ndarray): Indices of each unique stimuli
+    """
+    
     spike_count = []
 
     for i, stim_time in enumerate(stim_times):
@@ -121,23 +145,16 @@ def get_spike_counts(
 def get_binned_triggered_spike_counts_fast(
     spike_times, 
     stim_times, 
-    bins):
+    bins
+):
     """
     Fast peri-stimulus time histogram using searchsorted.
-
-    Parameters
-    ----------
-    spike_times : 1D array_like, sorted
-        Times of all spikes (e.g. in seconds).
-    stim_times : 1D array_like
-        Times of stimulus onsets.
-    bins : 1D array_like
-        Bin edges *relative* to stimulus (e.g. np.linspace(-0.1, 0.5, 61)).
-
-    Returns
-    -------
-    counts : 2D ndarray, shape (n_trials, len(bins)-1)
-        counts[i, j] is the number of spikes in bin j of trial i.
+    Args:
+        spike_times (numpy.ndarray): Times of all spikes (e.g. in seconds).
+        stim_times (numpy.ndarray): Times of stimulus onsets.
+        bins (numpy.ndarray): Bin edges *relative* to stimulus
+    Returns:
+        counts (numpy.ndarray): Array of spike counts within time window, shape (n_trials, len(bins)-1)
     """
     # ensure numpy arrays
     spike_times = np.asarray(spike_times)
@@ -160,7 +177,20 @@ def get_binned_triggered_spike_counts_fast(
 
     return counts
 
-def get_spike_counts_all(units_table, stim_times, bins):
+def get_spike_counts_all(
+    units_table, 
+    stim_times, 
+    bins
+):
+    """
+    Get spike counts for all neurons.
+    Args:
+        units_table (pd.DataFrame): DataFrame containing units information.
+        stim_times (numpy.ndarray): Times of stimulus onsets.
+        bins (numpy.ndarray): Bin edges *relative* to stimulus
+    Returns:
+        spike_counts (numpy.ndarray): Array of spike counts within time window, for all neurons
+    """
     n_neurons = len(units_table.spike_times.values)
     spike_count = np.empty((n_neurons, len(stim_times), len(bins)-1))
 
