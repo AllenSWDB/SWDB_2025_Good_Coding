@@ -1,4 +1,4 @@
-# hash:sha256:7c889ac4a60e38c9bfc6b014198058c0c1c75fd0ef64aa9a98e62f6c9e319440
+# hash:sha256:e0a63e9816e1533bf9969b71f259fd6421933731b83fed7d5e8db4e3a971e48e
 ARG REGISTRY_HOST
 FROM $REGISTRY_HOST/codeocean/code-server-python-extensions-pack:4.101.2python3.12.4
 
@@ -13,4 +13,8 @@ RUN conda install -y \
     && conda clean -ya
 
 RUN pip install -U --no-cache-dir \
-    numpy==2.3.2
+    matplotlib==3.10.5 \
+    numpy==2.3.2 \
+    pandas==2.3.1 \
+    pynwb==3.1.1 \
+    scikit-learn==1.7.1

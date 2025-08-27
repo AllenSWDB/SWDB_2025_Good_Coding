@@ -17,8 +17,24 @@
 		"pip": {
 			"packages": [
 				{
+					"name": "matplotlib",
+					"version": "3.10.5"
+				},
+				{
 					"name": "numpy",
 					"version": "2.3.2"
+				},
+				{
+					"name": "pandas",
+					"version": "2.3.1"
+				},
+				{
+					"name": "pynwb",
+					"version": "3.1.1"
+				},
+				{
+					"name": "scikit-learn",
+					"version": "1.7.1"
 				}
 			],
 			"options": {},
