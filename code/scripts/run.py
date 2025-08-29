@@ -1,5 +1,5 @@
-import sys 
-sys.path.insert(0,'/code/src')
+import sys
+sys.path.insert(0, '/code/src')
 
-import packages.module
-print(variable)
+from package.module import jake_variable
+print(jake_variable)
