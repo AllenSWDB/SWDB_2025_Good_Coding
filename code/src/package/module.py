@@ -1,1 +1,3 @@
-jake_variable = 'better change'
+
+variable = "Bren was here"
+jake_variable = 'better variable than dan
