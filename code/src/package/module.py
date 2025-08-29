@@ -1,1 +1,1 @@
-variable = 'dan is here'
+variable = 'dan was here, avi too'
